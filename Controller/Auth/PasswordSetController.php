@@ -61,7 +61,7 @@ class PasswordSetController extends Controller
     }
 
     /**
-     * Resets a user's password and emails them the temporary password
+     * Sets a user's password
      *
      * @Route("/set-password", name="orkestra_password_set_create", defaults={"_format"="json"})
      * @Method("POST")

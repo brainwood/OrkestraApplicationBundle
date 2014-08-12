@@ -53,18 +53,20 @@ class PasswordResetController extends Controller
         if ($form->isValid()) {
             $email = $form->get('email')->getData();
             $em = $this->getDoctrine()->getManager();
-            $user = $em->getRepository('OrkestraApplicationBundle:User')->findOneBy(array('email' => $email));
+            $users = $em->getRepository('OrkestraApplicationBundle:User')->findBy(array('email' => $email));
 
-            if ($user) {
+            foreach ($users as $user) {
                 $passwordHelper = $this->get('orkestra.application.helper.password');
                 $hashedEntity = $passwordHelper->sendPasswordResetEmail($user, 'Password Reset Request');
 
                 $em->persist($user);
                 $em->persist($hashedEntity);
-                $em->flush();
 
-                return new JsonSuccessResponse('Your password has been reset. Please check your email for further instructions.');
             }
+
+            $em->flush();
+
+            return new JsonSuccessResponse('Your password has been reset. Please check your email for further instructions.');
         }
 
         sleep(2);
